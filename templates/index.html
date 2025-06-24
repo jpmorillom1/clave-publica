@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Claves Públicas y Privadas RSA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+
+    <div class="matrix-bg">
+        <canvas id="matrix-canvas"></canvas>
+    </div>
+
+    <header class="header">
+        <img src="https://www.dspace.uce.edu.ec/assets/custom/images/logo3.png" alt="Escudo UCE" style="height: 100px;">
+    
+        <h1>UNIVERSIDAD CENTRAL DEL ECUADOR</h1>
+        <div class="subtitle">SEGURIDAD Y GESTIÓN DE RIESGO EN LAS TI</div>
+        <div class="team">GRUPO 2: RODNEY ANDRARE, LENIN ALOMOTO, JUAN MORILLO, KENNET RODRIGUEZ</div>
+    </header>
+
+    <div class="container">
+        <h1 class="main-title glow">🔐 Demostrador RSA</h1>
+        
+        <div class="card generate-card">
+            <form method="post" action="/generate">
+                <button type="submit" class="generate-btn pulse">🔄 Generar Nuevas Claves</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>🧮 Clave Pública</h2>
+            <pre class="public-key">{{ public_key_pem if public_key_pem else 'Genera las claves para ver la clave pública aquí...' }}</pre>
+        </div>
+
+        <div class="card">
+            <h2>🔐 Clave Privada</h2>
+            <pre class="private-key">{{ private_key_pem if private_key_pem else 'Genera las claves para ver la clave privada aquí...' }}</pre>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="card">
+            <form method="post" action="/encrypt">
+                <h2>📝 Escribe un mensaje</h2>
+                <textarea name="message" placeholder="Escribe tu mensaje secreto aquí...">{{ message if message else '' }}</textarea>
+                <button type="submit" class="encrypt-btn">🔐 Cifrar y Descifrar</button>
+            </form>
+        </div>
+
+        {% if message %}
+        <div class="card message-card">
+            <h2>📤 Mensaje Original</h2>
+            <pre>{{ message }}</pre>
+        </div>
+
+        <div class="card encrypted-card">
+            <h2>🔏 Cifrado (Base64)</h2>
+            <pre>{{ encrypted_b64 }}</pre>
+        </div>
+
+        <div class="card decrypted-card">
+            <h2>🔓 Descifrado</h2>
+            <pre>{{ decrypted }}</pre>
+        </div>
+        {% endif %}
+
+        <div class="divider"></div>
+
+        <div class="card info-card">
+            <h2>ℹ️ ¿Cómo se generan las claves?</h2>
+            <ul class="info-list">
+                <li>🧠 Se elige un número <code>e</code> (exponente público), generalmente 65537.</li>
+                <li>🔢 Se generan dos números primos grandes <code>p</code> y <code>q</code>, y se calcula <code>n = p * q</code>.</li>
+                <li>📐 Se calcula <code>φ(n) = (p-1)*(q-1)</code>.</li>
+                <li>🔑 La clave pública es el par <code>(e, n)</code>.</li>
+                <li>🗝️ Se calcula <code>d</code> tal que <code>(d * e) mod φ(n) = 1</code>. Este <code>d</code> forma parte de la clave privada <code>(d, n)</code>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
